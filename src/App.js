@@ -7,13 +7,11 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { height: 0, height: 0 };
+
   }
 
 
   componentDidMount() {
-    this.handleWindowSizeChange();
-    window.addEventListener('resize', this.handleWindowSizeChange)
     const center = L.bounds([1.56073, 104.11475], [1.16, 103.502]).getCenter();
     const map = L.map('mapdiv').setView([center.x, center.y], 12);
 
@@ -42,19 +40,17 @@ class App extends Component {
     }
 
   }
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleWindowSizeChange)
-  }
-  handleWindowSizeChange = () => {
-    this.setState({ width: window.innerWidth })
-  }
+
+
   render() {
+
     return (
       <div className="container content">
         <header>
 
         </header>
         <noscript>You need to enable JavaScript to run this app.</noscript>
+
         <div id='mapdiv' style={{ height: '100%' }}></div>
       </div>
     );
