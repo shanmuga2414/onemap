@@ -1,62 +1,42 @@
-import React, { Component } from 'react';
-import L from 'leaflet';
-import './App.css';
-//const L = require('./onemap-leaflet.js');
+import React, { Component } from 'react'
+import Leaflet from 'leaflet';
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css';
 
-class App extends Component {
+Leaflet.Icon.Default.imagePath = '../node_modules/leaflet'
 
-  constructor(props) {
-    super(props);
+delete Leaflet.Icon.Default.prototype._getIconUrl;
 
-  }
+Leaflet.Icon.Default.mergeOptions({
+    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+    iconUrl: require('leaflet/dist/images/marker-icon.png'),
+    shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+});
 
 
-  componentDidMount() {
-    const center = L.bounds([1.56073, 104.11475], [1.16, 103.502]).getCenter();
-    const map = L.map('mapdiv').setView([center.x, center.y], 12);
 
-    const basemap = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
-      detectRetina: true,
-      maxZoom: 18,
-      minZoom: 11
-    });
-
-    map.setMaxBounds([[1.56073, 104.1147], [1.16, 103.502]]);
-
-    basemap.addTo(map);
-    getLocation();
-    function getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-      }
+export default class App extends Component {
+    state = {
+        lat: 1.3521,
+        lng: 103.8198,
+        zoom: 12,
     }
 
-    function showPosition(position) {
-      new L.Marker([position.coords.latitude, position.coords.longitude], { bounceOnAdd: false }).addTo(map);
-      const popup = L.popup()
-        .setLatLng([position.coords.latitude, position.coords.longitude])
-        .setContent('You are here!')
-        .openOn(map);
+
+    render() {
+        const position = [this.state.lat, this.state.lng]
+        return (
+            <Map center={position} zoom={this.state.zoom} style={{ height: '700px' }}>
+                <TileLayer
+                    attribution='<img src="https://docs.onemap.sg/maps/images/oneMap64-01.png" style="height:20px;width:20px;"/> New OneMap | Map data &copy; contributors, <a href="http://SLA.gov.sg">Singapore Land Authority</a>'
+                    url="https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png"
+                />
+                <Marker position={position}>
+                    <Popup>
+                        Son Konum
+        </Popup>
+                </Marker>
+            </Map>
+        )
     }
-
-  }
-
-
-  render() {
-
-    return (
-      <div className="container content">
-        <header>
-
-        </header>
-        <noscript>You need to enable JavaScript to run this app.</noscript>
-
-        <div id='mapdiv' style={{ height: '100%' }}></div>
-      </div>
-    );
-  }
 }
-
-
-
-export default App;
