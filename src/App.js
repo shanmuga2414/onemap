@@ -13,8 +13,6 @@ Leaflet.Icon.Default.mergeOptions({
     shadowUrl: require('leaflet/dist/images/marker-shadow.png')
 });
 
-
-
 export default class App extends Component {
     state = {
         lat: 1.3521,
